@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="ru"><head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AERION — аналитика качества воздуха</title>
+<script>
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";localStorage.setItem("promotekit_referral","1fd2949a-d22c-431b-92bf-02d4ad04ee24")}}catch(e){}
+</script>
+<style>
+@media (prefers-reduced-motion: no-preference) {
+.anim-wrap {
+overflow: hidden;
+display: inline-block;
+vertical-align: bottom;
+padding-bottom: 0.1em;
+margin-bottom: -0.1em;
+}
+.anim-line {
+display: inline-block;
+transform: translateY(110%);
+opacity: 0;
+transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.anim-fade-up {
+transform: translateY(24px);
+opacity: 0;
+transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.is-visible .anim-line,
+.is-visible.anim-line {
+transform: translateY(0);
+opacity: 1;
+}
+.is-visible .anim-fade-up,
+.is-visible.anim-fade-up {
+transform: translateY(0);
+opacity: 1;
+}
+
+.footer-wordmark-link {
+display: inline-flex;
+align-items: center;
+gap: 0.7rem;
+text-decoration: none;
+position: relative;
+}
+
+.footer-wordmark-glow {
+opacity: 1;
+filter: blur(20px) brightness(1.08) saturate(1.02);
+transition: opacity .25s ease;
+}
+
+.footer-wordmark-label,
+.footer-wordmark-main {
+will-change: transform, letter-spacing, text-shadow, opacity, color, filter;
+display: inline-block;
+}
+
+.footer-wordmark-link:hover .footer-wordmark-glow {
+animation: footer-wordmark-glow-burst .7s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.footer-wordmark-link:hover .footer-wordmark-label {
+animation: footer-wordmark-label-burst .65s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.footer-wordmark-link:hover .footer-wordmark-main {
+animation: footer-wordmark-main-burst .72s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+@keyframes footer-wordmark-glow-burst {
+0% {
+opacity: 1;
+transform: translateY(-50%) scale(1);
+filter: blur(20px) brightness(1.08);
+}
+
+35% {
+opacity: 1;
+transform: translateY(-52%) scale(1.2);
+filter: blur(26px) brightness(1.22);
+}
+
+100% {
+opacity: 1;
+transform: translateY(-50%) scale(1.1);
+filter: blur(22px) brightness(1.12);
+}
+}
+
+@keyframes footer-wordmark-label-burst {
+0% {
+transform: translateY(0) scale(1);
+letter-spacing: 0.28em;
+opacity: 1;
+color: rgba(15, 23, 42, 0.22);
+text-shadow: 0 0 12px rgba(96, 165, 250, 0.08);
+}
+
+45% {
+transform: translateY(-5px) scale(1.08);
+letter-spacing: 0.34em;
+opacity: 1;
+color: rgba(15, 23, 42, 0.42);
+filter: brightness(1.3);
+text-shadow: 0 0 16px rgba(255, 255, 255, 0.16), 0 0 28px rgba(96, 165, 250, 0.12);
+}
+
+100% {
+transform: translateY(-2px) scale(1.03);
+letter-spacing: 0.31em;
+opacity: 1;
+color: rgba(15, 23, 42, 0.3);
+filter: brightness(1.16);
+text-shadow: 0 0 14px rgba(255, 255, 255, 0.12), 0 0 22px rgba(96, 165, 250, 0.1);
+}
+}
+
+@keyframes footer-wordmark-main-burst {
+0% {
+transform: translateY(0) scale(1);
+letter-spacing: -0.035em;
+color: rgba(15, 23, 42, 0.54);
+text-shadow: 0 0 16px rgba(96, 165, 250, 0.08);
+}
+
+38% {
+transform: translateY(-10px) scale(1.035);
+letter-spacing: -0.045em;
+color: rgba(15, 23, 42, 0.78);
+filter: brightness(1.38);
+text-shadow: 0 0 18px rgba(255, 255, 255, 0.14), 0 0 36px rgba(96, 165, 250, 0.14);
+}
+
+62% {
+transform: translateY(2px) scale(0.995);
+letter-spacing: -0.03em;
+color: rgba(15, 23, 42, 0.66);
+filter: brightness(1.22);
+text-shadow: 0 0 14px rgba(255, 255, 255, 0.1), 0 0 26px rgba(96, 165, 250, 0.1);
+}
+
+100% {
+transform: translateY(-3px) scale(1.018);
+letter-spacing: -0.038em;
+color: rgba(15, 23, 42, 0.62);
+filter: brightness(1.14);
+text-shadow: 0 0 14px rgba(255, 255, 255, 0.1), 0 0 28px rgba(96, 165, 250, 0.1);
+}
+}
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+const observer = new IntersectionObserver((entries, observer) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('is-visible');
+observer.unobserve(entry.target);
+}
+});
+}, observerOptions);
+document.querySelectorAll('.anim-trigger').forEach(el => observer.observe(el));
+});
+</script>
+<script src="https://cdn.tailwindcss.com"></script></head>
+  <body class="">
+    <div class="fixed inset-0 z-[-1] pointer-events-none">
+      <div class="absolute inset-0 bg-gradient-to-b from-[#f0f4f8] via-[#f8fafc] to-white"></div>
+      <!-- Abstract atmospheric grid/lines -->
+      <svg class="absolute w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0f172a" stroke-width="0.5"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"></rect>
+      </svg>
+    </div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 pt-6">
+      <div class="mx-auto max-w-7xl">
+        <div class="mx-auto max-w-[72rem]">
+          <div class="relative h-14 sm:h-16 flex items-center justify-between rounded-full border border-white/60 bg-white/55 backdrop-blur-xl shadow-[0_10px_40px_rgba(148,163,184,0.16)] px-3 sm:px-4">
+            <!-- Soft ambient glow -->
+            <div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.10),transparent_28%),radial-gradient(circle_at_80%_50%,rgba(147,197,253,0.16),transparent_30%)]"></div>
+
+            <!-- Fine internal border -->
+            <div class="pointer-events-none absolute inset-[1px] rounded-full border border-slate-200/70"></div>
+
+            <!-- Left: Brand -->
+            <div class="relative z-10 flex items-center gap-3 pl-1">
+              <div class="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-blue-200/70 bg-gradient-to-br from-white to-blue-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" viewBox="0 0 48 48" aria-hidden="true" fill="none">
+                  <circle cx="24" cy="24" r="15" stroke="currentColor" stroke-width="1.6" opacity="0.9"></circle>
+                  <circle cx="24" cy="24" r="5" fill="currentColor" opacity="0.95"></circle>
+                  <path d="M24 7.5C30 12 33 17 33 24C33 31 30 36 24 40.5" stroke="currentColor" stroke-width="1.4" opacity="0.7"></path>
+                  <path d="M24 7.5C18 12 15 17 15 24C15 31 18 36 24 40.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"></path>
+                  <path d="M8 24H40" stroke="currentColor" stroke-width="1.2" opacity="0.35"></path>
+                </svg>
+              </div>
+
+              <div class="flex items-center leading-none">
+                <span class="text-sm sm:text-[15px] font-medium tracking-tight text-slate-900">
+                  AERION
+                </span>
+              </div>
+            </div>
+
+            <!-- Center: Nav links -->
+            <nav class="relative z-10 hidden md:flex items-center gap-1.5">
+              <a href="#system-view" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-600 hover:text-slate-900 hover:bg-white/70 transition">
+                AQI онлайн
+              </a>
+              <a href="#observed-layers" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-600 hover:text-slate-900 hover:bg-white/70 transition">
+                Слои данных
+              </a>
+              <a href="#methodology" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-600 hover:text-slate-900 hover:bg-white/70 transition">
+                Прогноз
+              </a>
+              <a href="#network-status" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-600 hover:text-slate-900 hover:bg-white/70 transition">
+                Методика
+              </a>
+            </nav>
+
+            <!-- Right: Actions -->
+            <div class="relative z-10 hidden md:flex items-center gap-2 pr-1">
+              <a href="#access" class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-[13px] font-mono uppercase tracking-[0.16em] text-slate-500 hover:text-slate-800 transition">
+                API-доступ
+              </a>
+
+              <a href="#request-access" class="group relative inline-flex h-10 items-center justify-center overflow-hidden rounded-full border border-blue-200/70 bg-gradient-to-r from-white/90 to-blue-50/80 px-5 text-[13px] font-medium text-slate-900 shadow-[0_2px_10px_rgba(148,163,184,0.12),inset_0_1px_0_rgba(255,255,255,0.85)] transition-all duration-300 hover:shadow-[0_8px_24px_rgba(59,130,246,0.14)] hover:border-blue-300/80">
+                <span class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.95),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.45),transparent_55%)] opacity-80"></span>
+                <span class="relative z-10 flex items-center gap-2">
+                  Запросить демо
+                  <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" class="text-blue-600 transition-transform duration-300 group-hover:translate-x-0.5"></iconify-icon>
+                </span>
+              </a>
+            </div>
+
+            <!-- Mobile button -->
+            <button type="button" id="mobile-menu-toggle" aria-expanded="false" aria-controls="mobile-nav" class="relative z-10 md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200/70 bg-white/70 text-slate-700 hover:bg-white transition">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+                <path d="M4 6h16"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div id="mobile-nav" class="relative z-10 mt-3 hidden md:hidden">
+            <div class="rounded-[28px] border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_18px_50px_rgba(148,163,184,0.16)] p-4">
+              <nav class="flex flex-col gap-2">
+                <a href="#system-view" class="rounded-2xl px-4 py-3 text-sm font-medium text-slate-800 hover:bg-white/80 transition">
+                  AQI онлайн
+                </a>
+                <a href="#observed-layers" class="rounded-2xl px-4 py-3 text-sm font-medium text-slate-800 hover:bg-white/80 transition">
+                  Слои данных
+                </a>
+                <a href="#methodology" class="rounded-2xl px-4 py-3 text-sm font-medium text-slate-800 hover:bg-white/80 transition">
+                  Прогноз
+                </a>
+                <a href="#network-status" class="rounded-2xl px-4 py-3 text-sm font-medium text-slate-800 hover:bg-white/80 transition">
+                  Методика
+                </a>
+                <a href="#access" class="rounded-2xl px-4 py-3 text-sm font-medium text-slate-800 hover:bg-white/80 transition">
+                  API-доступ
+                </a>
+                <a href="#request-access" class="rounded-2xl px-4 py-3 text-sm font-medium text-white bg-slate-950 hover:bg-blue-600 transition">
+                  Запросить демо
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section id="system-view" class="relative min-h-[860px] lg:min-h-[920px] overflow-hidden border-b border-slate-200/50 px-6 md:px-8 lg:px-12">
+      <!-- Full Hero Image -->
+      <div class="absolute inset-0 z-0">
+        <!-- Replace this src with your final image -->
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c0e5cd86-3d23-4068-befd-b05819267d62_3840w.jpg" alt="Визуализация атмосферной обсерватории" class="w-full h-full object-cover">
+
+        <!-- Image overlays for DNA / readability -->
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(235,243,251,0.28)_0%,rgba(235,243,251,0.44)_12%,rgba(235,243,251,0.62)_28%,rgba(235,243,251,0.46)_42%,rgba(235,243,251,0.18)_64%,rgba(235,243,251,0.03)_100%)]"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(219,234,254,0.04)_0%,rgba(239,246,255,0.07)_20%,rgba(241,245,249,0.15)_50%,rgba(241,245,249,0.19)_100%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_24%_32%,rgba(147,197,253,0.13),transparent_25%),radial-gradient(circle_at_70%_40%,rgba(96,165,250,0.08),transparent_28%)]"></div>
+      </div>
+
+      <!-- Structural atmospheric grid -->
+      <div class="absolute inset-0 z-[1] pointer-events-none opacity-[0.08]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hero-grid" width="56" height="56" patternUnits="userSpaceOnUse">
+              <path d="M 56 0 L 0 0 0 56" fill="none" stroke="#0f172a" stroke-width="0.6"></path>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-grid)"></rect>
+        </svg>
+      </div>
+
+      <!-- Content -->
+      <div class="relative z-10 max-w-7xl mx-auto pt-40 pb-32 lg:pt-40 lg:pb-32">
+        <div class="max-w-[760px] anim-trigger">
+          <!-- Eyebrow -->
+          <div class="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/58 backdrop-blur-xl px-4 py-2 shadow-[0_6px_24px_rgba(148,163,184,0.10)] mb-8 anim-fade-up" style="transition-delay: 0s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-blue-700">
+              На базе Open-Meteo • Мониторинг качества воздуха в реальном времени
+            </span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="font-display text-[3.3rem] sm:text-[4.4rem] lg:text-[5.5rem] leading-[0.98] tracking-[-0.045em] text-slate-950 font-light max-w-[12ch] mb-7">
+            <span class="anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.1s;">
+                Живая аналитика
+              </span>
+            </span>
+            <span class="anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.18s;">
+                качества воздуха
+              </span>
+            </span>
+            <span class="anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.26s;">
+                для городов и команд
+              </span>
+            </span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="max-w-[42rem] text-[1.05rem] sm:text-[1.15rem] lg:text-[1.2rem] leading-[1.7] text-slate-700/88 font-normal mb-10 anim-fade-up" style="transition-delay: 0.35s;">
+            Следите за AQI, PM2.5, PM10, озоном и диоксидом азота в реальном
+            времени. Интерфейс объединяет живые срезы по городам, прогнозный
+            контекст и региональные сигналы качества воздуха в один
+            продуктовый слой.
+          </p>
+
+          <!-- CTA row -->
+          <div class="flex flex-col sm:flex-row items-start gap-4 mb-14">
+            <a href="#request-access" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full border border-blue-200/70 bg-gradient-to-r from-slate-950 to-slate-900 px-6 text-[14px] font-medium text-white shadow-[0_10px_30px_rgba(15,23,42,0.18)] transition-all duration-300 hover:shadow-[0_14px_38px_rgba(15,23,42,0.24)] anim-fade-up" style="transition-delay: 0.45s;">
+              <span class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.20),transparent_28%)] opacity-90"></span>
+              <span class="relative z-10 inline-flex items-center gap-2">
+                Открыть онлайн-дашборд
+                <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" class="transition-transform duration-300 group-hover:translate-x-0.5"></iconify-icon>
+              </span>
+            </a>
+
+            <a href="#methodology" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full border border-slate-300/80 bg-white/58 backdrop-blur-xl px-6 text-[14px] font-medium text-slate-800 shadow-[0_6px_22px_rgba(148,163,184,0.10)] transition-all duration-300 hover:bg-white/72 hover:shadow-[0_10px_28px_rgba(148,163,184,0.16)] anim-fade-up" style="transition-delay: 0.55s;">
+              <span class="pointer-events-none absolute inset-0 rounded-full bg-[linear-gradient(135deg,rgba(255,255,255,0.65),transparent_55%)]"></span>
+              <span class="relative z-10 inline-flex items-center gap-2">
+                Посмотреть прогнозную модель
+              </span>
+            </a>
+          </div>
+
+          <!-- Metrics module -->
+          <div class="glass-panel relative max-w-4xl rounded-[28px] px-5 py-5 sm:px-6 sm:py-6 shadow-[0_24px_70px_rgba(148,163,184,0.12)] anim-fade-up" style="transition-delay: 0.65s;">
+            <div class="pointer-events-none absolute inset-0 rounded-[28px] overflow-hidden">
+              <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.52),rgba(255,255,255,0.12)_28%,transparent_55%)]"></div>
+              <div class="absolute inset-x-0 top-0 h-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.35),transparent)]"></div>
+              <div class="absolute -top-10 left-10 w-40 h-40 rounded-full bg-white/20 blur-3xl"></div>
+            </div>
+
+            <div class="corner-tl"></div>
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+            <div class="corner-br"></div>
+
+            <div class="relative z-10 flex items-center justify-between gap-4 pb-4 mb-5 border-b border-white/45">
+              <div class="flex items-center gap-3">
+                <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-700">
+                  Городской срез онлайн
+              </span>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-end gap-2">
+              <button type="button" data-city="Лос-Анджелес" class="aq-city-btn inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-700 border border-slate-200/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+                Лос-Анджелес
+              </button>
+              <button type="button" data-city="Берлин" class="aq-city-btn inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-700 border border-slate-200/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+                Берлин
+              </button>
+              <button type="button" data-city="Дели" class="aq-city-btn inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-700 border border-slate-200/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+                Дели
+              </button>
+              <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50/85 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-700 border border-emerald-200/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                Open-Meteo онлайн
+              </span>
+              </div>
+            </div>
+
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-0 md:divide-x md:divide-white/35">
+              <div class="px-2 md:px-5 anim-fade-up" style="transition-delay: 0.75s;">
+                <div id="hero-aqi" class="font-display text-[2rem] sm:text-[2.2rem] leading-none tracking-[-0.04em] text-slate-950 mb-2">
+                  --
+                </div>
+                <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 mb-2">
+                  AQI (США)
+                </div>
+                <p id="hero-aqi-text" class="text-sm leading-relaxed text-slate-800/90">
+                  Загружаем текущий срез по городу.
+                </p>
+              </div>
+
+              <div class="px-2 md:px-5 anim-fade-up" style="transition-delay: 0.85s;">
+                <div id="hero-pm25" class="font-display text-[2rem] sm:text-[2.2rem] leading-none tracking-[-0.04em] text-slate-950 mb-2">
+                  --
+                </div>
+                <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 mb-2">
+                  PM2.5 µg/m³
+                </div>
+                <p id="hero-pm25-text" class="text-sm leading-relaxed text-slate-800/90">
+                  Концентрация мелких частиц для выбранного города.
+                </p>
+              </div>
+
+              <div class="px-2 md:px-5 anim-fade-up" style="transition-delay: 0.95s;">
+                <div id="hero-pm10" class="font-display text-[2rem] sm:text-[2.2rem] leading-none tracking-[-0.04em] text-slate-950 mb-2">
+                  --
+                </div>
+                <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 mb-2">
+                  PM10 µg/m³
+                </div>
+                <p id="hero-pm10-text" class="text-sm leading-relaxed text-slate-800/90">
+                  Сигнал крупных частиц из онлайн-потока качества воздуха.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Monitoring Layers -->
+    <section id="observed-layers" class="relative py-24 lg:py-28 px-6 md:px-8 lg:px-12 border-t border-slate-200/50 overflow-hidden bg-[#EEF4FA]">
+      <!-- atmospheric section wash -->
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(238,244,250,0.72)_24%,rgba(234,242,248,0.96)_100%)] pointer-events-none"></div>
+
+      <!-- structural grid -->
+      <div class="absolute inset-0 pointer-events-none opacity-[0.045]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="layers-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#0f172a" stroke-width="0.6"></path>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#layers-grid)"></rect>
+        </svg>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <!-- Intro -->
+        <div class="max-w-3xl mb-14 lg:mb-16 anim-trigger">
+          <div class="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/60 backdrop-blur-xl px-4 py-2 shadow-[0_6px_24px_rgba(148,163,184,0.10)] mb-6 anim-fade-up" style="transition-delay: 0s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-blue-700">
+                Слои качества воздуха
+            </span>
+          </div>
+
+          <h2 class="font-display text-[2.35rem] sm:text-[2.9rem] lg:text-[3.45rem] leading-[1.02] tracking-[-0.04em] text-slate-950 font-light mb-5">
+            <span class="block sm:inline anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.1s;">
+                Считывайте сигналы,
+              </span>
+            </span>
+            <span class="block anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.2s;">
+                которые формируют риск
+              </span>
+            </span>
+          </h2>
+
+          <p class="max-w-2xl text-[1rem] sm:text-[1.06rem] leading-[1.75] text-slate-600 anim-fade-up" style="transition-delay: 0.3s;">
+            От AQI и плотности взвешенных частиц до озона и NO₂: дашборд
+            превращает открытые экологические данные в понятный онлайн-вид
+            для команд, которым нужен быстрый контекст.
+          </p>
+        </div>
+
+        <!-- 3-column instrumentation grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-7 items-stretch anim-trigger">
+          <!-- Column 1 -->
+          <div class="flex flex-col gap-6 lg:gap-7 min-h-full">
+            <!-- Visual card -->
+            <div class="group relative min-h-[320px] rounded-[28px] overflow-hidden bg-white/40 backdrop-blur-xl border border-white/55 shadow-[0_26px_70px_rgba(148,163,184,0.14),0_8px_24px_rgba(15,23,42,0.05)] anim-fade-up">
+              <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.52))]"></div>
+              <div class="absolute inset-0 pointer-events-none">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_35%_30%,rgba(147,197,253,0.22),transparent_28%),radial-gradient(circle_at_70%_65%,rgba(59,130,246,0.14),transparent_32%)]"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_48%)]"></div>
+              </div>
+
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/aad8a2f0-bbfc-49f3-82c6-8c685a09bc97_1600w.jpg" alt="Визуализация взвешенных частиц в атмосфере" class="absolute inset-0 w-full h-full object-cover opacity-[0.48] mix-blend-multiply transition-transform duration-700 group-hover:scale-105">
+
+              <div class="relative z-10 p-7 lg:p-8 h-full flex flex-col justify-between">
+                <div class="flex items-center justify-between gap-3">
+                  <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                    LYR-01
+                  </span>
+                  <span class="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/65 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-blue-700">
+                    Активен
+                  </span>
+                </div>
+
+                <div class="mt-auto">
+                  <h3 class="font-display text-[1.55rem] lg:text-[1.7rem] leading-[1.08] tracking-[-0.03em] text-slate-950 mb-3">
+                    Взвешенные частицы
+                  </h3>
+                  <p class="text-[0.98rem] leading-[1.7] text-slate-700 max-w-[24ch]">
+                    Отслеживайте PM2.5 и PM10 в активных регионах, сравнивайте
+                    сдвиги плотности и смотрите исторический фон.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric card -->
+            <div class="group relative min-h-[210px] rounded-[28px] overflow-hidden bg-white/36 backdrop-blur-xl border border-white/55 shadow-[0_20px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] anim-fade-up">
+              <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.50),transparent_52%)]"></div>
+              <div class="absolute inset-0 opacity-[0.08]" style="background-image: radial-gradient(circle at 1px 1px, rgba(15,23,42,0.25) 1px, transparent 0); background-size: 14px 14px;"></div>
+
+              <div class="relative z-10 p-7 lg:p-8 h-full flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                    Сеть
+                  </span>
+                  <iconify-icon icon="solar:radar-linear" class="text-blue-500 text-lg"></iconify-icon>
+                </div>
+
+                <div class="flex-grow flex flex-col justify-center">
+                  <div class="font-display text-[3rem] lg:text-[3.4rem] leading-none tracking-[-0.05em] text-slate-950 mb-2">
+                    186
+                  </div>
+                  <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-600 mb-3">
+                    Регионов под наблюдением
+                  </div>
+                  <p class="text-sm leading-[1.7] text-slate-700 max-w-[25ch]">
+                    Синхронизированные экологические зоны под активным
+                    атмосферным наблюдением.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2 -->
+          <div class="flex flex-col gap-6 lg:gap-7 min-h-full">
+            <!-- Content card -->
+            <div class="group relative min-h-[250px] rounded-[28px] overflow-hidden bg-white/34 backdrop-blur-xl border border-white/55 shadow-[0_20px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] anim-fade-up">
+              <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.45),transparent_55%)]"></div>
+              <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-300/70 to-transparent opacity-80"></div>
+
+              <div class="relative z-10 p-7 lg:p-8 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.18em] text-slate-500">
+                  <iconify-icon icon="solar:wind-linear" class="text-blue-500 text-base"></iconify-icon>
+                  Слой переноса
+                </div>
+
+                <div class="flex flex-col gap-4">
+                  <p class="text-[1rem] lg:text-[1.05rem] leading-[1.75] text-slate-700">
+                    Обсерватория моделирует, как загрязнения переносятся
+                    между регионами, выявляет коридоры движения, смену
+                    направления и развитие трансграничного воздействия.
+                  </p>
+                  <p class="font-mono text-[11px] tracking-[0.16em] uppercase text-slate-500">
+                    Обновляется непрерывно • с учётом прогноза
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visual metric card -->
+            <div class="group relative min-h-[280px] rounded-[28px] overflow-hidden bg-white/38 backdrop-blur-xl border border-white/55 shadow-[0_20px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] anim-fade-up">
+              <div class="absolute inset-0 opacity-[0.08]" style="background-image: radial-gradient(circle at 1px 1px, rgba(59,130,246,0.78) 1px, transparent 0); background-size: 16px 16px;"></div>
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(147,197,253,0.18),transparent_32%)]"></div>
+
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d03f9abc-52b6-4771-a2cf-2dbf4d3a97e6_1600w.jpg" alt="Достоверность сенсоров и атмосферное поле" class="absolute inset-0 w-full h-full object-cover opacity-[0.62] mix-blend-multiply transition-transform duration-700 group-hover:scale-105">
+
+              <div class="relative z-10 p-7 lg:p-8 h-full flex flex-col items-center justify-center text-center">
+                <div class="font-display text-[3.4rem] lg:text-[4rem] leading-none tracking-[-0.05em] text-slate-950 mb-2">
+                  9.2
+                  <span class="text-blue-600">M</span>
+                </div>
+                <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-600 mb-4">
+                  Точек данных в сутки
+                </p>
+                <p class="text-sm leading-[1.7] text-slate-700 max-w-[24ch]">
+                  Экологические потоки, сведённые в единый слой наблюдения.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 3 -->
+          <div class="flex flex-col min-h-full">
+            <div class="group relative flex-1 min-h-[540px] rounded-[28px] overflow-hidden bg-slate-950 shadow-[0_24px_70px_rgba(15,23,42,0.18)] border border-white/20 anim-fade-up">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/eea0a2e4-0eca-4ec4-9bf7-df6b7f15206c_1600w.jpg" alt="Региональная обсерватория воздействия" class="absolute inset-0 w-full h-full object-cover opacity-[0.62] transition-transform duration-1000 group-hover:scale-105">
+
+              <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.04)_0%,rgba(15,23,42,0.18)_24%,rgba(15,23,42,0.72)_72%,rgba(15,23,42,0.88)_100%)]"></div>
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(96,165,250,0.28),transparent_20%)]"></div>
+
+              <div class="relative z-10 p-7 lg:p-8 h-full flex flex-col justify-between text-white">
+                <div class="flex items-center justify-between gap-3 text-[11px] font-mono uppercase tracking-[0.18em] text-slate-300/85">
+                  <span>Региональное воздействие</span>
+                  <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 backdrop-blur-md">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    Модель онлайн
+                  </span>
+                </div>
+
+                <div class="mt-auto max-w-[26ch]">
+                  <h3 class="font-display text-[1.8rem] lg:text-[2rem] leading-[1.08] tracking-[-0.03em] text-white mb-4">
+                    Индекс регионального воздействия
+                  </h3>
+                  <p class="text-[0.98rem] leading-[1.75] text-slate-300 mb-6">
+                    Картируйте суммарный риск качества воздуха по географии,
+                    плотности и атмосферной интенсивности, чтобы находить зоны
+                    с максимальным операционным влиянием.
+                  </p>
+
+                  <div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.18em] text-slate-400">
+                    <iconify-icon icon="solar:global-linear" class="text-blue-400 text-base"></iconify-icon>
+                    слой с учётом населения
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Global View -->
+    <section id="network-status" class="relative py-24 lg:py-28 px-6 md:px-8 lg:px-12 border-t border-slate-200/50 overflow-hidden bg-[#EAF2F8]">
+      <!-- Section break background image -->
+      <div class="absolute inset-0 z-0">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9af4888e-3851-40e5-9934-0e5a980afaa3_3840w.jpg" alt="Atmospheric map background" class="w-full h-full object-cover opacity-[0.76]">
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.22)_0%,rgba(234,242,248,0.38)_22%,rgba(234,242,248,0.56)_100%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(147,197,253,0.10),transparent_26%),radial-gradient(circle_at_78%_32%,rgba(59,130,246,0.07),transparent_26%)]"></div>
+      </div>
+
+      <!-- Structural grid -->
+      <div class="absolute inset-0 z-[1] pointer-events-none opacity-[0.045]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="global-view-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#0f172a" stroke-width="0.6"></path>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#global-view-grid)"></rect>
+        </svg>
+      </div>
+
+      <div class="relative z-10 max-w-[1360px] mx-auto">
+        <!-- Section Header -->
+        <div class="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-8 md:gap-16 pb-16 items-end anim-trigger">
+          <div class="flex flex-col items-start text-left">
+            <div class="inline-flex items-center gap-2 mb-6 rounded-full border border-blue-200/70 bg-white/60 backdrop-blur-xl px-4 py-2 shadow-[0_6px_24px_rgba(148,163,184,0.10)] anim-fade-up" style="transition-delay: 0s;">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-blue-700">
+                Региональный срез
+              </span>
+            </div>
+
+            <h2 class="font-display text-[2.35rem] sm:text-[2.9rem] lg:text-[3.45rem] leading-[1.02] tracking-[-0.04em] text-slate-950 font-light max-w-[12ch]">
+              <span class="block sm:inline anim-wrap">
+                <span class="anim-line" style="transition-delay: 0.1s;">
+                  Живая карта
+                </span>
+              </span>
+              <span class="block anim-wrap">
+                <span class="anim-line" style="transition-delay: 0.2s;">
+                  городских условий
+                </span>
+              </span>
+            </h2>
+          </div>
+
+          <p class="text-[1rem] sm:text-[1.06rem] leading-[1.75] text-slate-600 text-left md:pb-2 max-w-[40ch] anim-fade-up" style="transition-delay: 0.3s;">
+            Сравнивайте выбранные города, текущий AQI, концентрацию частиц и
+            краткосрочные изменения прогноза в одной онлайн-панели на базе
+            Open-Meteo.
+          </p>
+        </div>
+
+        <!-- Two Large Interface Panels -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 anim-trigger">
+          <!-- Panel 1: Atmospheric State Map -->
+          <div class="group relative rounded-[24px] p-6 flex flex-col gap-6 overflow-hidden border border-white/60 bg-white/38 backdrop-blur-2xl shadow-[0_28px_80px_rgba(148,163,184,0.14),0_8px_24px_rgba(15,23,42,0.05)] anim-fade-up">
+            <!-- Glass highlights -->
+            <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.48),transparent_52%)]"></div>
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-300/70 to-transparent opacity-80"></div>
+            <div class="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full bg-blue-200/18 blur-[90px]"></div>
+
+            <div class="relative z-10">
+              <h3 class="font-display text-[1.4rem] lg:text-[1.55rem] tracking-[-0.03em] text-slate-950 font-medium">
+                Сравнение городов онлайн
+              </h3>
+              <p class="text-sm text-slate-600 leading-[1.75] mt-1 max-w-md">
+                Смотрите выбранные города, сравнивайте диапазоны AQI и следите
+                за обновлением концентрации частиц в одном компактном блоке.
+              </p>
+            </div>
+
+            <!-- Mockup UI -->
+            <div class="relative z-10 flex-1 rounded-[20px] overflow-hidden flex flex-col md:flex-row border border-white/50 bg-white/30 backdrop-blur-xl shadow-[0_10px_40px_rgba(148,163,184,0.12)] ring-1 ring-white/40 min-h-[360px]">
+              <!-- Left Column: Region List -->
+              <div class="w-full md:w-[40%] border-b md:border-b-0 md:border-r border-white/35 flex flex-col bg-white/[0.18]">
+                <div class="p-4 border-b border-white/35 flex justify-between items-center bg-white/[0.18]">
+                  <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                    Города в выборке
+                  </span>
+                  <span id="compare-count" class="font-mono text-[10px] bg-blue-100 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded">
+                    3
+                  </span>
+                </div>
+
+                <div class="flex-1 overflow-hidden p-3 flex flex-col gap-1.5">
+                  <!-- Region 1 -->
+                  <div class="p-2.5 rounded-lg border border-blue-200/50 bg-white/50 flex items-center justify-between cursor-pointer shadow-sm">
+                    <div class="flex items-center gap-3">
+                      <div class="relative">
+                        <div class="absolute inset-0 bg-blue-500/15 rounded-full animate-pulse"></div>
+                        <div class="w-2 h-2 bg-blue-500 rounded-full relative z-10"></div>
+                      </div>
+                      <div class="flex flex-col gap-0.5">
+                        <span id="city-0-name" class="text-xs text-slate-800 font-medium">
+                          Лос-Анджелес
+                        </span>
+                        <span id="city-0-meta" class="text-[10px] text-slate-500 font-mono">
+                          загрузка
+                        </span>
+                      </div>
+                    </div>
+                    <span id="city-0-aqi" class="font-mono text-[10px] bg-blue-100 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded">
+                      --
+                    </span>
+                  </div>
+
+                  <!-- Region 2 -->
+                  <div class="p-2.5 rounded-lg border border-transparent hover:border-white/40 hover:bg-white/[0.34] flex items-center justify-between cursor-pointer transition-colors">
+                    <div class="flex items-center gap-3">
+                      <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                      <div class="flex flex-col gap-0.5">
+                        <span id="city-1-name" class="text-xs text-slate-700 font-medium">
+                          Берлин
+                        </span>
+                        <span id="city-1-meta" class="text-[10px] text-slate-500 font-mono">
+                          загрузка
+                        </span>
+                      </div>
+                    </div>
+                    <span id="city-1-aqi" class="font-mono text-[10px] bg-emerald-100 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded">
+                      --
+                    </span>
+                  </div>
+
+                  <!-- Region 3 -->
+                  <div class="p-2.5 rounded-lg border border-transparent hover:border-white/40 hover:bg-white/[0.34] flex items-center justify-between cursor-pointer transition-colors">
+                    <div class="flex items-center gap-3">
+                      <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
+                      <div class="flex flex-col gap-0.5">
+                        <span id="city-2-name" class="text-xs text-slate-700 font-medium">
+                          Дели
+                        </span>
+                        <span id="city-2-meta" class="text-[10px] text-slate-500 font-mono">
+                          загрузка
+                        </span>
+                      </div>
+                    </div>
+                    <span id="city-2-aqi" class="font-mono text-[10px] bg-amber-100 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded">
+                      --
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Area: Atmospheric Map -->
+              <div class="w-full md:w-[60%] flex flex-col relative">
+                <!-- Top Stats -->
+                <div class="flex p-4 border-b border-white/35 gap-4 bg-white/[0.14]">
+                  <div class="flex-1 flex flex-col gap-1.5">
+                    <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                      Городов выше AQI 100
+                    </span>
+                    <div class="flex items-end gap-1.5">
+                      <span id="active-events" class="text-2xl text-slate-950 font-medium tracking-tight leading-none">
+                        --
+                      </span>
+                      <span class="text-[10px] text-blue-600 font-mono mb-0.5">
+                        онлайн
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="w-px bg-white/35"></div>
+
+                  <div class="flex-1 flex flex-col gap-1.5">
+                    <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                      Пик AQI за 24 часа
+                    </span>
+                    <div class="flex items-end gap-2">
+                      <span id="forecast-peak" class="text-2xl text-slate-950 font-medium tracking-tight leading-none">
+                        --
+                      </span>
+                      <span class="text-[9px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1 py-0.5 rounded font-medium mb-1">
+                        СИНХР.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Environmental map image -->
+                <div class="p-4 flex-1 flex flex-col justify-end relative overflow-hidden min-h-[180px]">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/47012244-8175-4168-9400-e6041fe4df8b_3840w.webp?w=800&q=80" alt="Карта атмосферных условий в реальном времени" class="absolute inset-0 w-full h-full object-cover opacity-[0.26]">
+                  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.20),rgba(234,242,248,0.10)_26%,rgba(255,255,255,0.04)_100%)]"></div>
+                  <div class="absolute inset-0 bg-[radial-gradient(circle_at_62%_32%,rgba(96,165,250,0.22),transparent_18%),radial-gradient(circle_at_42%_68%,rgba(147,197,253,0.18),transparent_22%)]"></div>
+
+                  <!-- Grid lines -->
+                  <div class="absolute inset-x-0 bottom-4 top-4 flex flex-col justify-between opacity-[0.14] pointer-events-none">
+                    <div class="border-b border-dashed border-slate-500/40"></div>
+                    <div class="border-b border-dashed border-slate-500/40"></div>
+                    <div class="border-b border-dashed border-slate-500/40"></div>
+                  </div>
+
+                  <!-- Overlay telemetry SVG -->
+                  <div class="absolute inset-0 px-4 py-4 pointer-events-none">
+                    <svg viewBox="0 0 200 60" class="w-full h-full overflow-visible" preserveAspectRatio="none">
+                      <path d="M8,46 C28,34 46,22 68,24 C92,26 104,14 128,18 C152,22 168,36 192,20" fill="none" stroke="rgba(59,130,246,0.55)" stroke-width="1.2" stroke-linecap="round"></path>
+                      <path d="M18,18 C44,14 62,36 92,40 C118,44 142,34 178,42" fill="none" stroke="rgba(148,163,184,0.42)" stroke-width="1" stroke-linecap="round"></path>
+                      <circle cx="128" cy="18" r="2.4" fill="#3B82F6"></circle>
+                      <circle cx="192" cy="20" r="2.4" fill="#10B981"></circle>
+                      <circle cx="68" cy="24" r="2.4" fill="#F59E0B"></circle>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Bottom status line -->
+                <div class="h-10 border-t border-white/35 px-4 flex items-center justify-between bg-white/[0.14]">
+                  <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span class="text-[11px] text-slate-600 truncate font-light">
+                      <span id="snapshot-status">Загружаем онлайн-данные Open-Meteo по выбранным городам</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Regional Exposure Console -->
+          <div class="group relative rounded-[24px] p-6 flex flex-col gap-6 overflow-hidden border border-white/60 bg-white/38 backdrop-blur-2xl shadow-[0_28px_80px_rgba(148,163,184,0.14),0_8px_24px_rgba(15,23,42,0.05)] anim-fade-up">
+            <!-- Glass highlights -->
+            <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.48),transparent_52%)]"></div>
+            <div class="pointer-events-none absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-blue-200/18 blur-[90px]"></div>
+
+            <div class="relative z-10">
+              <h3 class="font-display text-[1.4rem] lg:text-[1.55rem] tracking-[-0.03em] text-slate-950 font-medium">
+                Консоль регионального риска
+              </h3>
+              <p class="text-sm text-slate-600 leading-[1.75] mt-1 max-w-md">
+                Анализируйте риск, смену интенсивности и локальные атмосферные
+                аномалии в отслеживаемых зонах.
+              </p>
+            </div>
+
+            <!-- Mockup UI -->
+            <div class="relative z-10 flex-1 rounded-[20px] overflow-hidden flex flex-col md:flex-row border border-white/50 bg-white/30 backdrop-blur-xl shadow-[0_10px_40px_rgba(148,163,184,0.12)] ring-1 ring-white/40 min-h-[360px]">
+              <!-- Left Area: Regional Radar -->
+              <div class="w-full md:w-[45%] border-b md:border-b-0 md:border-r border-white/35 flex items-center justify-center relative p-8 bg-[radial-gradient(circle_at_center,rgba(96,165,250,0.08)_0%,transparent_70%)]">
+                <span class="absolute top-4 left-4 font-mono text-[9px] text-slate-500 tracking-[0.18em] border border-white/40 bg-white/[0.26] px-1.5 py-0.5 rounded">
+                  РЕГИОНАЛЬНЫЙ_СКАН::LIVE
+                </span>
+
+                <!-- Radar Graphic -->
+                <div class="relative w-36 h-36">
+                  <div class="absolute inset-0 border border-slate-300/45 rounded-full"></div>
+                  <div class="absolute inset-[18%] border border-slate-300/40 rounded-full"></div>
+                  <div class="absolute inset-[36%] border border-slate-300/45 rounded-full"></div>
+                  <div class="absolute inset-[54%] border border-blue-300/40 rounded-full bg-blue-100/20"></div>
+
+                  <div class="absolute top-0 bottom-0 left-1/2 w-px bg-slate-300/30 -translate-x-1/2"></div>
+                  <div class="absolute left-0 right-0 top-1/2 h-px bg-slate-300/30 -translate-y-1/2"></div>
+
+                  <div class="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-blue-500 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_10px_rgba(59,130,246,0.45)]"></div>
+
+                  <div class="absolute top-[20%] right-[25%] w-1.5 h-1.5 bg-amber-500 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.45)]"></div>
+                  <div class="absolute bottom-[28%] left-[18%] w-2 h-2 bg-sky-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.45)]">
+                    <div class="absolute inset-0 rounded-full border border-sky-400/60 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+                  </div>
+                  <div class="absolute top-[65%] right-[20%] w-1 h-1 bg-emerald-500 rounded-full opacity-70"></div>
+
+                  <div class="absolute inset-0 rounded-full border-r border-blue-400/55 animate-[spin_3.5s_linear_infinite]" style="background: conic-gradient(from 0deg, transparent 62%, rgba(59,130,246,0.12) 100%); mix-blend-mode: screen;"></div>
+                </div>
+              </div>
+
+              <!-- Right Area: Exposure Event Log -->
+              <div class="w-full md:w-[55%] flex flex-col bg-white/[0.10]">
+                <div class="p-4 border-b border-white/35 flex justify-between items-center bg-white/[0.14]">
+                  <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                    Журнал событий
+                  </span>
+                  <span class="font-mono text-[10px] text-blue-700 bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded">
+                    2 АКТИВНЫХ
+                  </span>
+                </div>
+
+                <div class="flex-1 overflow-hidden p-3 flex flex-col gap-2 relative z-10">
+                  <!-- Event 1 -->
+                  <div class="p-3 rounded-lg bg-amber-50 border border-amber-200/70 flex flex-col gap-2 relative shadow-sm">
+                    <div class="flex items-start justify-between">
+                      <div class="flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                        <span class="text-[11px] text-amber-700 font-medium">
+                          Рост переноса частиц
+                        </span>
+                      </div>
+                      <span class="text-[9px] text-slate-500 font-mono">
+                        1 мин назад
+                      </span>
+                    </div>
+                    <span class="text-[11px] text-slate-600 font-light truncate">
+                      Интенсивность регионального переноса растёт вдоль
+                      наблюдаемого коридора.
+                    </span>
+                    <div class="flex justify-end mt-1">
+                      <a href="#methodology" class="inline-flex text-[9px] text-amber-800 bg-amber-100 hover:bg-amber-200 border border-amber-200 px-3 py-1 rounded transition-colors font-medium tracking-wide">
+                        ПРОВЕРИТЬ
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Event 2 -->
+                  <div class="p-3 rounded-lg bg-blue-50 border border-blue-200/70 flex flex-col gap-2 relative hover:border-blue-300 transition-colors">
+                    <div class="flex items-start justify-between">
+                      <div class="flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                        <span class="text-[11px] text-blue-700 font-medium">
+                          Скорректирована достоверность сенсоров
+                        </span>
+                      </div>
+                      <span class="text-[9px] text-slate-500 font-mono">
+                        4 мин назад
+                      </span>
+                    </div>
+                    <span class="text-[11px] text-slate-600 font-light truncate">
+                      Сдвиг калибровки подтверждён в весовых сигнальных зонах.
+                    </span>
+                    <div class="flex justify-end mt-1">
+                      <a href="#observed-layers" class="inline-flex text-[9px] text-slate-700 bg-white/70 hover:bg-white border border-white/80 px-3 py-1 rounded transition-colors font-medium tracking-wide">
+                        ОТКРЫТЬ
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Event 3 -->
+                  <div class="p-3 rounded-lg border border-transparent hover:border-white/40 hover:bg-white/[0.20] flex flex-col gap-2 relative transition-colors opacity-80">
+                    <div class="flex items-start justify-between">
+                      <div class="flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                        <span class="text-[11px] text-emerald-700 font-medium">
+                          Прогнозный слой стабилизирован
+                        </span>
+                      </div>
+                      <span class="text-[9px] text-slate-500 font-mono">
+                        12 мин назад
+                      </span>
+                    </div>
+                    <span class="text-[11px] text-slate-500 font-light truncate">
+                      Краткосрочная модель воздействия вернулась к нормальному уровню доверия.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Supporting Modules -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 anim-trigger">
+          <!-- Module 1 -->
+          <div class="relative rounded-[22px] p-5 overflow-hidden border border-white/60 bg-white/34 backdrop-blur-xl shadow-[0_18px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] anim-fade-up">
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_60%)]"></div>
+
+            <div class="relative z-10 flex items-center justify-between mb-5">
+              <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                Правила автоматизации
+              </span>
+              <iconify-icon icon="solar:shuffle-linear" class="text-slate-400 text-sm"></iconify-icon>
+            </div>
+
+            <div class="relative z-10 flex flex-col gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded border border-blue-200 bg-blue-50 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.08)]">
+                  <iconify-icon icon="solar:radar-2-linear" class="text-cyan-600 text-sm"></iconify-icon>
+                </div>
+                <div class="h-px bg-slate-300/40 flex-1 relative overflow-hidden">
+                  <div class="absolute inset-0 bg-blue-400/50 w-full animate-pulse"></div>
+                </div>
+                <div class="w-7 h-7 rounded border border-emerald-200 bg-emerald-50 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.08)]">
+                  <iconify-icon icon="solar:shield-check-linear" class="text-emerald-600 text-sm"></iconify-icon>
+                </div>
+              </div>
+
+              <div class="flex justify-between font-mono text-[10px] text-slate-500 uppercase">
+                <span>При аномалии</span>
+                <span>Авто-изоляция</span>
+              </div>
+
+              <div class="pt-2 border-t border-white/35 text-[11px] text-slate-600 font-light leading-relaxed">
+                Политика автореагирования активна. На этой неделе 24
+                наблюдаемых перехода были стабилизированы без ручного
+                вмешательства.
+              </div>
+            </div>
+          </div>
+
+          <!-- Module 2 -->
+          <div class="relative rounded-[22px] p-5 overflow-hidden border border-white/60 bg-white/34 backdrop-blur-xl shadow-[0_18px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] anim-fade-up">
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_60%)]"></div>
+
+            <div class="relative z-10 flex items-center justify-between mb-5">
+              <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                Журнал системы
+              </span>
+              <iconify-icon icon="solar:history-linear" class="text-slate-400 text-sm"></iconify-icon>
+            </div>
+
+            <div class="relative z-10 pl-3.5 flex flex-col gap-4 mt-1">
+              <div class="absolute left-[3px] top-1.5 bottom-1.5 w-px bg-slate-300/40"></div>
+
+              <div class="relative flex flex-col gap-0.5">
+                <div class="absolute -left-[18px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white shadow-[0_0_5px_rgba(16,185,129,0.25)]"></div>
+                <span class="text-[11px] text-slate-700 font-medium">
+                  Цикл обновления переноса завершён
+                </span>
+                <span class="text-[9px] text-slate-500 font-mono">
+                  10:42 AM
+                </span>
+              </div>
+
+              <div class="relative flex flex-col gap-0.5">
+                <div class="absolute -left-[18px] top-1.5 w-2 h-2 rounded-full bg-blue-500 border-2 border-white"></div>
+                <span class="text-[11px] text-slate-700 font-medium">
+                  Модель воздействия синхронизирована
+                </span>
+                <span class="text-[9px] text-slate-500 font-mono">
+                  09:15 AM
+                </span>
+              </div>
+
+              <div class="relative flex flex-col gap-0.5">
+                <div class="absolute -left-[18px] top-1.5 w-2 h-2 rounded-full bg-slate-400 border-2 border-white"></div>
+                <span class="text-[11px] text-slate-500 font-medium">
+                  Плановая калибровка
+                </span>
+                <span class="text-[9px] text-slate-400 font-mono">
+                  02:00 AM
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Module 3 -->
+          <div class="relative rounded-[22px] p-5 overflow-hidden border border-white/60 bg-white/34 backdrop-blur-xl shadow-[0_18px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] anim-fade-up">
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_60%)]"></div>
+
+            <div class="relative z-10 flex items-center justify-between mb-5">
+              <span class="font-mono text-[10px] text-slate-500 uppercase tracking-[0.18em]">
+                Состояние инфраструктуры
+              </span>
+              <iconify-icon icon="solar:server-2-linear" class="text-slate-400 text-sm"></iconify-icon>
+            </div>
+
+            <div class="relative z-10 flex items-center gap-5 mt-2">
+              <div class="w-14 h-14 relative flex-shrink-0">
+                <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(148,163,184,0.15)" stroke-width="3"></circle>
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#10B981" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="15" stroke-linecap="round"></circle>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center flex-col">
+                  <span class="text-base font-medium text-slate-950 tracking-tight leading-none mt-0.5">
+                    85
+                  </span>
+                  <span class="text-[7px] text-emerald-600 font-medium tracking-wide mt-0.5">
+                    ИНДЕКС
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex-1 flex flex-col gap-3">
+                <div class="flex flex-col gap-1.5">
+                  <div class="flex justify-between font-mono text-[9px] text-slate-500">
+                    <span>Ресурс CPU</span>
+                    <span class="text-emerald-600">Стабильно</span>
+                  </div>
+                  <div class="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 w-[40%] rounded-full"></div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <div class="flex justify-between font-mono text-[9px] text-slate-500">
+                    <span>Использование памяти</span>
+                    <span class="text-amber-600">82%</span>
+                  </div>
+                  <div class="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-amber-500 w-[82%] rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. System Logic -->
+    <section id="methodology" class="relative py-24 lg:py-28 px-6 md:px-8 lg:px-12 border-t border-slate-200/50 overflow-hidden bg-[#EEF4FA]">
+      <!-- Atmospheric section wash -->
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(238,244,250,0.72)_24%,rgba(234,242,248,0.96)_100%)] pointer-events-none"></div>
+
+      <!-- Structural grid -->
+      <div class="absolute inset-0 pointer-events-none opacity-[0.045]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="logic-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#0f172a" stroke-width="0.6"></path>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#logic-grid)"></rect>
+        </svg>
+      </div>
+
+      <!-- Soft atmospheric glows -->
+      <div class="absolute top-[-18%] left-[-8%] w-[42%] h-[42%] blur-[110px] rounded-full pointer-events-none bg-blue-300/14"></div>
+      <div class="absolute bottom-[-18%] right-[-8%] w-[40%] h-[40%] blur-[110px] rounded-full pointer-events-none bg-sky-300/10"></div>
+
+      <div class="relative z-10 max-w-[1360px] mx-auto">
+        <!-- Header -->
+        <div class="max-w-4xl mx-auto mb-16 lg:mb-20 text-center anim-trigger">
+          <div class="inline-flex items-center justify-center px-4 py-2 rounded-full border mb-6 backdrop-blur-xl bg-white/60 border-blue-200/70 shadow-[0_6px_24px_rgba(148,163,184,0.10)] anim-fade-up" style="transition-delay: 0s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2"></span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-blue-700">
+              Логика системы
+            </span>
+          </div>
+
+          <h2 class="font-display text-[2.05rem] sm:text-[2.9rem] lg:text-[3.45rem] leading-[1.04] tracking-[-0.045em] text-slate-950 font-light mb-6 max-w-[20ch] sm:max-w-[20ch] mx-auto text-center">
+            <span class="block anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.1s;">
+                От распределённых измерений
+              </span>
+            </span>
+            <span class="block anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.2s;">
+                к ясной картине среды
+              </span>
+            </span>
+          </h2>
+
+          <p class="text-[1rem] sm:text-[1.06rem] max-w-2xl mx-auto leading-[1.75] text-slate-600 anim-fade-up" style="transition-delay: 0.3s;">
+            Обсерватория превращает разрозненные атмосферные входы в единый
+            операционный слой, который можно отслеживать, интерпретировать и
+            использовать в работе.
+          </p>
+        </div>
+
+        <!-- Main Split Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 max-w-7xl mx-auto items-start anim-trigger">
+          <!-- Left Column: Steps -->
+          <div class="col-span-1 lg:col-span-5 flex flex-col space-y-3">
+            <!-- Step 1 -->
+            <div class="anim-fade-up" style="transition-delay: 0.1s;">
+              <button type="button" class="logic-step group w-full relative overflow-hidden rounded-[22px] bg-gradient-to-br from-white/82 to-white/52 p-8 md:p-10 cursor-pointer border border-blue-200/70 shadow-[0_22px_60px_rgba(148,163,184,0.12),0_8px_24px_rgba(15,23,42,0.04)] text-left" data-step-nav="0">
+                <div class="absolute inset-0 bg-blue-500/[0.04] pointer-events-none"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.56),transparent_60%)] pointer-events-none"></div>
+                <div class="flex items-start justify-between w-full relative z-10">
+                  <h3 class="text-4xl md:text-5xl tracking-tighter font-light text-slate-950">
+                    Сбор
+                  </h3>
+                  <span class="text-sm font-medium mt-1 ml-2 font-mono text-blue-700">
+                    01
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="anim-fade-up" style="transition-delay: 0.2s;">
+              <button type="button" class="logic-step group w-full relative rounded-[22px] p-8 md:p-10 cursor-pointer transition-all duration-500 border border-white/60 bg-white/34 backdrop-blur-xl hover:bg-white/[0.44] hover:border-blue-200/70 text-left shadow-[0_18px_50px_rgba(148,163,184,0.10),0_6px_18px_rgba(15,23,42,0.04)]" data-step-nav="1">
+                <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_60%)] pointer-events-none rounded-[22px]"></div>
+                <div class="flex items-start justify-between w-full relative z-10">
+                  <h3 class="text-4xl md:text-5xl text-slate-500 group-hover:text-slate-800 tracking-tighter font-light transition-colors duration-300">
+                    Нормализация
+                  </h3>
+                  <span class="text-sm font-medium text-slate-500 group-hover:text-slate-700 mt-1 ml-2 font-mono transition-colors">
+                    02
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="anim-fade-up" style="transition-delay: 0.3s;">
+              <button type="button" class="logic-step group w-full relative rounded-[22px] p-8 md:p-10 cursor-pointer transition-all duration-500 border border-white/60 bg-white/34 backdrop-blur-xl hover:bg-white/[0.44] hover:border-blue-200/70 text-left shadow-[0_18px_50px_rgba(148,163,184,0.10),0_6px_18px_rgba(15,23,42,0.04)]" data-step-nav="2">
+                <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_60%)] pointer-events-none rounded-[22px]"></div>
+                <div class="flex items-start justify-between w-full relative z-10">
+                  <h3 class="text-4xl md:text-5xl text-slate-500 group-hover:text-slate-800 tracking-tighter font-light transition-colors duration-300">
+                    Интерпретация
+                  </h3>
+                  <span class="text-sm font-medium text-slate-500 group-hover:text-slate-700 mt-1 ml-2 font-mono transition-colors">
+                    03
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="anim-fade-up" style="transition-delay: 0.4s;">
+              <button type="button" class="logic-step group w-full relative rounded-[22px] p-8 md:p-10 cursor-pointer transition-all duration-500 border border-white/60 bg-white/34 backdrop-blur-xl hover:bg-white/[0.44] hover:border-blue-200/70 text-left shadow-[0_18px_50px_rgba(148,163,184,0.10),0_6px_18px_rgba(15,23,42,0.04)]" data-step-nav="3">
+                <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_60%)] pointer-events-none rounded-[22px]"></div>
+                <div class="flex items-start justify-between w-full relative z-10">
+                  <h3 class="text-4xl md:text-5xl text-slate-500 group-hover:text-slate-800 tracking-tighter font-light transition-colors duration-300">
+                    Прогноз
+                  </h3>
+                  <span class="text-sm font-medium text-slate-500 group-hover:text-slate-700 mt-1 ml-2 font-mono transition-colors">
+                    04
+                  </span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Content & Visual -->
+          <div class="col-span-1 lg:col-span-7 flex flex-col gap-10 pt-2 lg:pt-0 sticky top-10">
+            <!-- Image container -->
+            <div class="w-full aspect-[16/10] overflow-hidden rounded-[24px] relative group bg-white/30 backdrop-blur-2xl border border-white/60 shadow-[0_28px_80px_rgba(148,163,184,0.14),0_8px_24px_rgba(15,23,42,0.05)] anim-fade-up" style="transition-delay: 0.2s;">
+              <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_52%)] z-10 pointer-events-none"></div>
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(96,165,250,0.22),transparent_22%),radial-gradient(circle_at_28%_72%,rgba(147,197,253,0.18),transparent_24%)] z-10 pointer-events-none"></div>
+
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e3160dde-0640-4209-ba49-2fdd186ab7aa_1600w.jpg?w=800&q=80" alt="Этап сбора экологических измерений" class="w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] logic-step-image" data-step-image="">
+
+              <div class="absolute inset-0 bg-gradient-to-tr from-[#EEF4FA]/82 via-[#EEF4FA]/12 to-transparent z-10"></div>
+            </div>
+
+            <!-- Detail Content -->
+            <div class="anim-fade-up" style="transition-delay: 0.3s;">
+              <h3 class="font-display text-2xl md:text-3xl font-medium tracking-tight mb-4 text-slate-950 logic-step-title" data-step-title="">
+                Сбор
+              </h3>
+
+              <p class="md:text-[1.1rem] text-[1rem] leading-[1.8] font-light mb-8 text-slate-600 max-w-[62ch] transition-all duration-500 logic-step-description" data-step-description="">
+                Собирайте онлайн-потоки из сенсорных сетей, спутниковых слоёв и
+                региональных измерений, чтобы построить единый входной слой
+                наблюдений.
+              </p>
+
+              <a href="#access" class="group inline-flex h-11 items-center justify-center rounded-full px-6 text-sm font-medium transition-all duration-300 bg-slate-950 text-white hover:bg-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
+                <span class="mr-2">Изучить методику</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5">
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const steps = [
+            {
+              title: 'Сбор',
+              description: 'Собирайте онлайн-потоки из сенсорных сетей, спутниковых слоёв и региональных измерений, чтобы построить единый входной слой наблюдений.',
+              image: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e3160dde-0640-4209-ba49-2fdd186ab7aa_1600w.jpg'
+            },
+            {
+              title: 'Нормализация',
+              description: 'Приводите качество сигнала из разных источников к общему виду, калибруйте расхождения и собирайте измерения в согласованную атмосферную модель.',
+              image: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ad49c60a-ac88-46a9-803d-231a2d478e0c_1600w.jpg'
+            },
+            {
+              title: 'Интерпретация',
+              description: 'Выявляйте накопление загрязнений, аномалии переноса и новые сдвиги воздействия в наблюдаемых зонах.',
+              image: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ea63cda8-7a78-412b-a258-e0190a2d2f29_1600w.jpg'
+            },
+            {
+              title: 'Прогноз',
+              description: 'Прогнозируйте движение, изменение плотности и краткосрочные сдвиги по времени и географии, чтобы точнее планировать реакцию.',
+              image: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f6611eb5-6c22-42ad-ad4c-1afd7eaeb616_1600w.jpg'
+            }
+          ];
+
+          let currentStep = 0;
+          const navItems = document.querySelectorAll('#methodology [data-step-nav]');
+          const img = document.querySelector('#methodology [data-step-image]');
+          const title = document.querySelector('#methodology [data-step-title]');
+          const description = document.querySelector('#methodology [data-step-description]');
+
+          function updateNav(index) {
+            navItems.forEach((nav, i) => {
+              const heading = nav.querySelector('h3');
+              const number = nav.querySelector('span:last-child');
+              const isActive = i === index;
+
+              if (isActive) {
+                nav.className = 'logic-step group w-full relative overflow-hidden rounded-[22px] bg-gradient-to-br from-white/82 to-white/52 p-8 md:p-10 cursor-pointer border border-blue-200/70 shadow-[0_22px_60px_rgba(148,163,184,0.12),0_8px_24px_rgba(15,23,42,0.04)] text-left transition-all duration-500';
+                heading.className = 'text-4xl md:text-5xl tracking-tighter font-light text-slate-950';
+                number.className = 'text-sm font-medium mt-1 ml-2 font-mono text-blue-700';
+              } else {
+                nav.className = 'logic-step group w-full relative rounded-[22px] p-8 md:p-10 cursor-pointer transition-all duration-500 border border-white/60 bg-white/34 backdrop-blur-xl hover:bg-white/[0.44] hover:border-blue-200/70 text-left shadow-[0_18px_50px_rgba(148,163,184,0.10),0_6px_18px_rgba(15,23,42,0.04)]';
+                heading.className = 'text-4xl md:text-5xl text-slate-500 group-hover:text-slate-800 tracking-tighter font-light transition-colors duration-300';
+                number.className = 'text-sm font-medium text-slate-500 group-hover:text-slate-700 mt-1 ml-2 font-mono transition-colors';
+              }
+            });
+          }
+
+          function setActiveStep(index) {
+            currentStep = index;
+            const step = steps[index];
+
+            updateNav(index);
+
+            img.style.opacity = '0';
+            img.style.transform = 'scale(1.02)';
+            title.style.opacity = '0';
+            description.style.opacity = '0';
+
+            setTimeout(() => {
+              img.src = step.image;
+              title.textContent = step.title;
+              description.textContent = step.description;
+
+              requestAnimationFrame(() => {
+                img.style.opacity = '1';
+                img.style.transform = 'scale(1)';
+                title.style.opacity = '1';
+                description.style.opacity = '1';
+              });
+            }, 180);
+          }
+
+          navItems.forEach((nav, i) => {
+            nav.addEventListener('click', () => setActiveStep(i));
+          });
+
+          img.style.transition = 'opacity 480ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1)';
+          title.style.transition = 'opacity 320ms ease';
+          description.style.transition = 'opacity 320ms ease';
+
+          updateNav(currentStep);
+        })();
+      </script>
+    </section>
+
+    <!-- 5. Operational Value -->
+    <section id="operational-value" class="relative py-24 lg:py-28 px-6 md:px-8 lg:px-12 border-t border-slate-200/50 overflow-hidden bg-[#EDF4FA]">
+      <!-- Atmospheric section wash -->
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(237,244,250,0.72)_26%,rgba(230,239,247,0.96)_100%)] pointer-events-none"></div>
+
+      <!-- Structural grid -->
+      <div class="absolute inset-0 pointer-events-none opacity-[0.04]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="operational-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#0f172a" stroke-width="0.6"></path>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#operational-grid)"></rect>
+        </svg>
+      </div>
+
+      <!-- Soft ambient glows -->
+      <div class="absolute top-[-10%] left-[-6%] w-[34rem] h-[34rem] rounded-full bg-blue-200/18 blur-[110px] pointer-events-none"></div>
+      <div class="absolute bottom-[-12%] right-[-6%] w-[30rem] h-[30rem] rounded-full bg-sky-200/14 blur-[100px] pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-[1360px] mx-auto">
+        <!-- Section Header -->
+        <div class="flex flex-col items-start mb-16 lg:mb-20 gap-6 max-w-4xl anim-trigger">
+          <div class="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/60 backdrop-blur-xl px-4 py-2 shadow-[0_6px_24px_rgba(148,163,184,0.10)] anim-fade-up" style="transition-delay: 0s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-blue-700">
+              Практическая ценность
+            </span>
+          </div>
+
+          <h2 class="font-display text-[2.05rem] sm:text-[2.65rem] lg:text-[3.45rem] leading-[1.04] tracking-[-0.045em] text-slate-950 font-light max-w-20ch] sm:max-w-[20ch] lg:max-w-[20ch]">
+            <span class="inline sm:block anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.1s;">
+                Создано для решений,
+              </span>
+            </span>
+            <span class="inline sm:block anim-wrap">
+              <span class="anim-line" style="transition-delay: 0.2s;">
+                которым нужны чистые сигналы
+              </span>
+            </span>
+          </h2>
+
+          <p class="text-[1rem] sm:text-[1.06rem] leading-[1.75] text-slate-600 max-w-[44rem] anim-fade-up" style="transition-delay: 0.3s;">
+            Экологическая видимость особенно важна, когда условия быстро
+            меняются. Этот блок показывает, как обсерватория превращает
+            атмосферные сигналы в более раннее обнаружение, точный прогноз и
+            уверенное планирование реакции.
+          </p>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 anim-trigger">
+          <!-- Card 1: Outcome narrative -->
+          <div class="relative bg-white/62 backdrop-blur-xl p-8 rounded-[24px] flex flex-col justify-between h-[520px] shadow-[0_18px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] border border-white/70 hover:border-blue-200/80 transition-colors overflow-hidden anim-fade-up" style="transition-delay: 0.1s;">
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.46),transparent_60%)] pointer-events-none"></div>
+
+            <div class="relative z-10">
+              <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-6">
+                Результат 01
+              </div>
+              <h3 class="font-display text-[1.35rem] leading-[1.15] tracking-[-0.03em] text-slate-950 mb-6">
+                Более раннее обнаружение за счёт чистых экологических сигналов
+              </h3>
+              <p class="text-slate-600 leading-[1.8] text-sm">
+                Выявляйте значимые сдвиги качества воздуха до того, как
+                региональные условия полностью усилятся, сокращая задержку
+                между появлением сигнала и реакцией команды.
+              </p>
+            </div>
+
+            <div class="mt-8 border-t border-white/70 pt-6 relative z-10">
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+                  Эффект для команды
+                </span>
+                <iconify-icon icon="solar:radar-2-linear" class="text-blue-500 text-base"></iconify-icon>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
+                  <span class="font-mono text-[12px] uppercase tracking-[0.16em] text-blue-700">
+                    MT
+                  </span>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900 leading-none mb-1">
+                    Команды мониторинга
+                  </div>
+                  <div class="text-xs text-slate-500 font-medium">
+                    Более раннее выявление аномалий
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Atmospheric image -->
+          <div class="relative rounded-[24px] overflow-hidden h-[520px] group bg-slate-950 shadow-[0_20px_60px_rgba(15,23,42,0.14)] border border-white/30 anim-fade-up" style="transition-delay: 0.2s;">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/163e54e9-84b2-4fa6-a55b-81d745775469_3840w.webp?w=800&q=80" alt="Операционная видимость атмосферы" class="transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-100 opacity-88 w-full h-full object-cover absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-slate-950/72"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_26%,rgba(96,165,250,0.30),transparent_18%)]"></div>
+
+            <div class="absolute inset-0 flex flex-col z-10 text-white p-8 justify-between">
+              <div class="flex justify-between items-start">
+                <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-200/85">
+                  Региональная видимость
+                </span>
+              </div>
+
+              <div class="max-w-[22ch]">
+                <h3 class="font-display text-[1.55rem] leading-[1.12] tracking-[-0.03em] text-white mb-3">
+                  Чёткая видимость меняющихся зон воздействия
+                </h3>
+                <p class="text-sm leading-[1.75] text-slate-300">
+                  Понимайте, где нарастает атмосферное давление, как оно
+                  распространяется и какие регионы требуют более пристального
+                  внимания.
+                </p>
+              </div>
+
+              <span class="text-[10px] font-mono opacity-70 uppercase tracking-[0.18em] ml-auto">
+                Наблюдаемость онлайн
+              </span>
+            </div>
+          </div>
+
+          <!-- Card 3: Metric proof -->
+          <div class="relative bg-white/62 backdrop-blur-xl p-8 rounded-[24px] flex flex-col items-center justify-between h-[520px] shadow-[0_18px_50px_rgba(148,163,184,0.12),0_6px_18px_rgba(15,23,42,0.04)] border border-white/70 hover:border-blue-200/80 transition-colors overflow-hidden group anim-fade-up" style="transition-delay: 0.3s;">
+            <!-- Decorative rings -->
+            <div class="absolute inset-0 pointer-events-none opacity-[0.05]">
+              <svg viewBox="0 0 100 100" class="w-full h-full stroke-slate-900 fill-none" stroke-width="0.5">
+                <circle cx="50" cy="50" r="20"></circle>
+                <circle cx="50" cy="50" r="35"></circle>
+                <circle cx="50" cy="50" r="48"></circle>
+              </svg>
+            </div>
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.46),transparent_60%)] pointer-events-none"></div>
+
+            <div class="text-center relative z-10 mt-4">
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500 block mb-2">
+                Надёжность прогноза
+              </span>
+              <span class="text-base font-medium text-slate-900 tracking-tight">
+                Уверенность в ответных действиях
+              </span>
+            </div>
+
+            <div class="relative w-56 h-56 flex items-center justify-center">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="font-display text-5xl font-medium text-slate-950 tracking-[-0.05em]">
+                  3.4
+                  <span class="text-blue-600">×</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full relative z-10">
+              <div class="text-center mb-5">
+                <p class="text-sm leading-[1.75] text-slate-600 max-w-[24ch] mx-auto">
+                  Более широкая региональная видимость по слоям атмосферных
+                  условий и наблюдаемым сдвигам.
+                </p>
+              </div>
+
+              <a href="#request-access" class="inline-flex w-full items-center justify-center bg-slate-950 text-white text-sm font-medium py-3.5 rounded-xl hover:bg-blue-600 transition-all duration-300 transform group-hover:-translate-y-0.5 shadow-[0_10px_24px_rgba(15,23,42,0.12)]">
+                Посмотреть эффект системы
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 4: Strong value / CTA -->
+          <div class="flex flex-col overflow-hidden group bg-center text-white h-[520px] bg-cover rounded-[24px] p-8 relative shadow-[0_20px_60px_rgba(15,23,42,0.14)] justify-between border border-white/20 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c3eac46a-01b0-4bae-a362-638327533871_3840w.webp?w=800&amp;q=80)] anim-fade-up" style="transition-delay: 0.4s;">
+            <!-- Gradient glow -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-400/20 transition-colors duration-500"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-950/12 via-slate-950/18 to-slate-950/78"></div>
+
+            <div class="flex justify-between items-start relative z-10">
+              <span class="font-display text-[1.2rem] font-medium tracking-tight">
+                Планирование реагирования
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 24 24">
+                <path fill="currentColor" fill-rule="evenodd" d="M17.47 15.53a.75.75 0 0 0 1.28-.53V6a.75.75 0 0 0-.75-.75H9a.75.75 0 0 0-.53 1.28z" clip-rule="evenodd"></path>
+                <path fill="currentColor" d="M5.47 17.47a.75.75 0 1 0 1.06 1.06l6.97-6.97l-1.06-1.06z" opacity=".5"></path>
+              </svg>
+            </div>
+
+            <div class="relative z-10">
+              <p class="leading-[1.7] text-[1.12rem] text-white max-w-[260px]">
+                Переходите от разрозненных измерений к более ясному
+                планированию реакции с онлайн-контекстом, прогнозной видимостью и
+                большей уверенностью в действиях.
+              </p>
+            </div>
+
+            <div class="space-y-2 text-sm relative z-10">
+              <div class="flex text-slate-200 text-[1rem] gap-2 items-center">
+                <span class="w-1 h-1 rounded-full bg-blue-400"></span>
+                Более раннее выявление аномалий
+              </div>
+              <div class="flex text-slate-200 text-[1rem] gap-2 items-center">
+                <span class="w-1 h-1 rounded-full bg-blue-400"></span>
+                Более точная региональная приоритизация
+              </div>
+              <div class="flex text-slate-200 text-[1rem] gap-2 items-center pt-3">
+                <span class="w-1 h-1 rounded-full bg-emerald-400"></span>
+                Для команд экологической аналитики
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Final CTA -->
+    <section id="request-access" class="relative py-28 lg:py-36 px-6 md:px-8 lg:px-12 border-t border-slate-200/50 overflow-hidden bg-[#EAF2F8]">
+      <div id="access" class="absolute -top-24"></div>
+      <!-- Full-width background image -->
+      <div class="absolute inset-0 z-0">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dd510eec-46d6-486e-863c-dcf153a97477_3840w.jpg" alt="Фон атмосферной обсерватории" class="w-full h-full object-cover opacity-[0.72]">
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.18)_0%,rgba(234,242,248,0.34)_24%,rgba(234,242,248,0.82)_100%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(147,197,253,0.10),transparent_24%),radial-gradient(circle_at_76%_34%,rgba(59,130,246,0.08),transparent_24%)]"></div>
+      </div>
+
+      <!-- Structural grid -->
+      <div class="absolute inset-0 z-[1] pointer-events-none opacity-[0.04]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="cta-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#0f172a" stroke-width="0.6"></path>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#cta-grid)"></rect>
+        </svg>
+      </div>
+
+      <div class="relative z-10 max-w-[1360px] mx-auto">
+        <footer class="sm:p-8 bg-white/34 backdrop-blur-2xl border border-white/60 rounded-[30px] shadow-[0_28px_80px_rgba(148,163,184,0.14),0_8px_24px_rgba(15,23,42,0.05)] pt-8 pr-6 pb-6 pl-6 sm:pt-10 sm:pr-8 sm:pb-8 sm:pl-8 overflow-hidden relative anim-trigger">
+          <!-- Glass highlight -->
+          <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),transparent_52%)] pointer-events-none"></div>
+          <div class="absolute -top-20 right-0 w-72 h-72 rounded-full bg-blue-200/14 blur-[90px] pointer-events-none"></div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 relative z-10">
+            <!-- Left: CTA + Contact -->
+            <div>
+              <div class="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/60 backdrop-blur-xl px-4 py-2 shadow-[0_6px_24px_rgba(148,163,184,0.10)] mb-6 anim-fade-up" style="transition-delay: 0s;">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-blue-700">
+                  Доступ
+                </span>
+              </div>
+
+              <h3 class="font-display text-[2.2rem] sm:text-[2.8rem] lg:text-[3.35rem] leading-[1.02] tracking-[-0.045em] text-slate-950 font-light max-w-[13ch]">
+                <span class="block anim-wrap">
+                  <span class="anim-line" style="transition-delay: 0.1s;">
+                    Готовы изучить
+                  </span>
+                </span>
+                <span class="block anim-wrap">
+                  <span class="anim-line" style="transition-delay: 0.2s;">
+                    живой слой воздуха?
+                  </span>
+                </span>
+                <span class="block font-medium text-slate-950 anim-wrap mt-2">
+                  <span class="anim-line" style="transition-delay: 0.3s;">
+                    Откроем его.
+                  </span>
+                </span>
+              </h3>
+
+              <div class="mt-10 anim-fade-up" style="transition-delay: 0.4s;">
+                <p class="text-sm text-slate-500 mb-3">
+                  Демо-доступ и помощь с внедрением
+                </p>
+
+                <a href="mailto:hello@aerionlabs.ai" class="inline-flex items-center text-2xl sm:text-3xl text-slate-950 font-display font-medium tracking-[-0.035em] hover:text-blue-700 transition-colors">
+                  hello@aerionlabs.ai
+                </a>
+
+                <div class="mt-4">
+                  <p class="mt-4 text-xs font-mono uppercase tracking-[0.18em] text-slate-500">
+                    AERION Demo Desk • команда аналитики качества воздуха
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Access form + Links -->
+            <div>
+              <h4 class="font-display text-[2rem] sm:text-[2.35rem] text-slate-950 font-medium tracking-[-0.03em] anim-fade-up" style="transition-delay: 0.5s;">
+                Доступ к продукту
+              </h4>
+
+              <form id="access-form" class="mt-6 space-y-6 anim-fade-up" style="transition-delay: 0.6s;">
+                <div>
+                  <input id="access-organization" type="text" placeholder="Организация *" class="w-full bg-transparent border-b border-slate-300 focus:border-blue-400 outline-none py-3 text-sm text-slate-900 placeholder-slate-500">
+                </div>
+
+                <div>
+                  <input id="access-email" type="email" placeholder="Рабочий email *" class="w-full bg-transparent border-b border-slate-300 focus:border-blue-400 outline-none py-3 text-sm text-slate-900 placeholder-slate-500">
+                </div>
+
+                <div class="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-5">
+                  <button type="submit" class="inline-flex items-center justify-between gap-3 px-5 py-3 rounded-full bg-slate-950 text-white text-sm font-medium hover:bg-blue-600 transition">
+                    Запросить демо
+                    <span class="inline-flex h-2 w-2 rounded-full bg-white"></span>
+                  </button>
+
+                  <p class="text-sm text-slate-500 xl:flex-1 xl:max-w-none">
+                    Закажите показ онлайн-дашборда AQI, городских срезов и
+                    прогнозного сценария.
+                  </p>
+                </div>
+              </form>
+
+              <div class="grid grid-cols-2 gap-8 mt-10 anim-fade-up" style="transition-delay: 0.7s;">
+                <div>
+                  <p class="text-xs text-slate-500 font-mono uppercase tracking-[0.18em]">
+                    Быстрые ссылки
+                  </p>
+                  <ul class="mt-3 space-y-2">
+                    <li>
+                      <a href="#system-view" class="text-lg font-medium tracking-tight text-slate-900 hover:underline underline-offset-4">
+                        Обзор системы
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#observed-layers" class="text-lg font-medium tracking-tight text-slate-900 hover:underline underline-offset-4">
+                        Слои данных
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#network-status" class="text-lg font-medium tracking-tight text-slate-900 hover:underline underline-offset-4">
+                        Срез по городам
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#methodology" class="text-lg font-medium tracking-tight text-slate-900 hover:underline underline-offset-4">
+                        Методика
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p class="text-xs text-slate-500 font-mono uppercase tracking-[0.18em]">
+                    Сценарии использования
+                  </p>
+                  <ul class="mt-3 space-y-2">
+                    <li>
+                      <span class="inline-flex items-center gap-2 text-lg font-medium tracking-tight text-slate-900">
+                        Климатические технологические команды
+                      </span>
+                    </li>
+                    <li>
+                      <span class="inline-flex items-center gap-2 text-lg font-medium tracking-tight text-slate-900">
+                        Платформы умного города
+                      </span>
+                    </li>
+                    <li>
+                      <span class="inline-flex items-center gap-2 text-lg font-medium tracking-tight text-slate-900">
+                        ESG- и операционные команды
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-10 pt-6 border-t border-white/45 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10 anim-fade-up" style="transition-delay: 0.8s;">
+            <div class="flex items-center gap-3">
+              <div class="relative flex items-center justify-center w-9 h-9 rounded-full border border-blue-200/70 bg-gradient-to-br from-white to-blue-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <svg class="w-4 h-4 text-blue-600" viewBox="0 0 48 48" aria-hidden="true" fill="none">
+                  <circle cx="24" cy="24" r="15" stroke="currentColor" stroke-width="1.6" opacity="0.9"></circle>
+                  <circle cx="24" cy="24" r="5" fill="currentColor" opacity="0.95"></circle>
+                  <path d="M24 7.5C30 12 33 17 33 24C33 31 30 36 24 40.5" stroke="currentColor" stroke-width="1.4" opacity="0.7"></path>
+                  <path d="M24 7.5C18 12 15 17 15 24C15 31 18 36 24 40.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"></path>
+                  <path d="M8 24H40" stroke="currentColor" stroke-width="1.2" opacity="0.35"></path>
+                </svg>
+              </div>
+              <span class="text-sm font-medium tracking-tight text-slate-950">
+                AERION
+              </span>
+            </div>
+
+            <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+              <a href="https://web-machine.pro" aria-label="Open Web Machine" class="footer-wordmark-link rounded-full border border-slate-200/70 bg-white/62 px-3 py-2 shadow-[0_10px_26px_rgba(148,163,184,0.10)]">
+                <div class="footer-wordmark-glow pointer-events-none absolute inset-x-2 top-1/2 h-8 -translate-y-1/2 rounded-full bg-sky-400/24"></div>
+                <div class="relative select-none">
+                  <span class="footer-wordmark-label text-[9px] font-semibold uppercase tracking-[0.28em] text-slate-950/20 [text-shadow:0_0_12px_rgba(96,165,250,0.08)]">
+                    MADE BY
+                  </span>
+                </div>
+                <div class="relative select-none">
+                  <span class="footer-wordmark-main text-[13px] font-semibold leading-none tracking-[-0.035em] text-slate-950/60 [text-shadow:0_0_16px_rgba(96,165,250,0.08)] sm:text-[14px]">
+                    WEB MACHINE
+                  </span>
+                </div>
+              </a>
+              <p class="text-xs text-slate-500">
+                © 2026 AERION Air Quality Intelligence — работает на Open-Meteo
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </section>
+  <script>
+    (() => {
+      const cities = [
+        { name: 'Лос-Анджелес', latitude: 34.0522, longitude: -118.2437, region: 'Калифорния, США' },
+        { name: 'Берлин', latitude: 52.52, longitude: 13.405, region: 'Германия' },
+        { name: 'Дели', latitude: 28.6139, longitude: 77.209, region: 'Индия' }
+      ];
+      const cityMap = new Map(cities.map((city) => [city.name, city]));
+      const cache = new Map();
+
+      const heroAqi = document.getElementById('hero-aqi');
+      const heroAqiText = document.getElementById('hero-aqi-text');
+      const heroPm25 = document.getElementById('hero-pm25');
+      const heroPm25Text = document.getElementById('hero-pm25-text');
+      const heroPm10 = document.getElementById('hero-pm10');
+      const heroPm10Text = document.getElementById('hero-pm10-text');
+      const compareCount = document.getElementById('compare-count');
+      const activeEvents = document.getElementById('active-events');
+      const forecastPeak = document.getElementById('forecast-peak');
+      const snapshotStatus = document.getElementById('snapshot-status');
+      const cityButtons = Array.from(document.querySelectorAll('.aq-city-btn'));
+      const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+      const mobileNav = document.getElementById('mobile-nav');
+      const accessForm = document.getElementById('access-form');
+      const accessOrganization = document.getElementById('access-organization');
+      const accessEmail = document.getElementById('access-email');
+
+      const formatValue = (value) => (
+        Number.isFinite(value) ? new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(value) : '--'
+      );
+
+      const classifyAqi = (value) => {
+        if (!Number.isFinite(value)) {
+          return 'Нет данных';
+        }
+        if (value <= 50) {
+          return 'Хорошо';
+        }
+        if (value <= 100) {
+          return 'Умеренно';
+        }
+        if (value <= 150) {
+          return 'Вредно для чувствительных групп';
+        }
+        if (value <= 200) {
+          return 'Вредно';
+        }
+        if (value <= 300) {
+          return 'Очень вредно';
+        }
+        return 'Опасно';
+      };
+
+      const updateButtonState = (activeCityName) => {
+        cityButtons.forEach((button) => {
+          const isActive = button.dataset.city === activeCityName;
+          button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          button.classList.toggle('bg-slate-950', isActive);
+          button.classList.toggle('text-white', isActive);
+          button.classList.toggle('border-slate-950', isActive);
+          button.classList.toggle('shadow-[0_10px_28px_rgba(15,23,42,0.16)]', isActive);
+          button.classList.toggle('bg-white/75', !isActive);
+          button.classList.toggle('text-slate-700', !isActive);
+          button.classList.toggle('border-slate-200/70', !isActive);
+        });
+      };
+
+      const getNext24HourPeak = (hourly) => {
+        if (!hourly || !Array.isArray(hourly.us_aqi) || hourly.us_aqi.length === 0) {
+          return null;
+        }
+        const nextWindow = hourly.us_aqi
+          .slice(0, 24)
+          .filter((value) => Number.isFinite(value));
+
+        return nextWindow.length ? Math.max(...nextWindow) : null;
+      };
+
+      const fetchCityData = async (city) => {
+        if (cache.has(city.name)) {
+          return cache.get(city.name);
+        }
+
+        const params = new URLSearchParams({
+          latitude: String(city.latitude),
+          longitude: String(city.longitude),
+          current: 'us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide',
+          hourly: 'us_aqi',
+          timezone: 'auto'
+        });
+
+        const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error(`Запрос Open-Meteo завершился с кодом ${response.status}`);
+        }
+
+        const payload = await response.json();
+        const cityData = {
+          city,
+          current: payload.current || {},
+          hourly: payload.hourly || {},
+          currentUnits: payload.current_units || {},
+          hourlyUnits: payload.hourly_units || {}
+        };
+
+        cache.set(city.name, cityData);
+        return cityData;
+      };
+
+      const renderHero = (cityData) => {
+        const { city, current, hourly } = cityData;
+        const aqi = current.us_aqi;
+        const pm25 = current.pm2_5;
+        const pm10 = current.pm10;
+        const ozone = current.ozone;
+        const no2 = current.nitrogen_dioxide;
+        const label = classifyAqi(aqi);
+        const nextPeak = getNext24HourPeak(hourly);
+
+        heroAqi.textContent = formatValue(aqi);
+        heroPm25.textContent = formatValue(pm25);
+        heroPm10.textContent = formatValue(pm10);
+
+        heroAqiText.textContent = `${label} в городе ${city.name}. O₃ ${formatValue(ozone)} µg/m³ • NO₂ ${formatValue(no2)} µg/m³.`;
+        heroPm25Text.textContent = `Концентрация мелких частиц по региону ${city.region}. Пик AQI в ближайшие 24 часа: ${formatValue(nextPeak)}.`;
+        heroPm10Text.textContent = `Сигнал крупных частиц для города ${city.name}, обновлён из текущего потока качества воздуха Open-Meteo.`;
+        snapshotStatus.textContent = `${city.name}: онлайн-снимок обновлён на интервал ${current.time || 'последнего доступного среза'}.`;
+
+        updateButtonState(city.name);
+      };
+
+      const renderComparison = (allCityData) => {
+        compareCount.textContent = String(allCityData.length);
+
+        allCityData.forEach((cityData, index) => {
+          const { city, current } = cityData;
+          const nameEl = document.getElementById(`city-${index}-name`);
+          const metaEl = document.getElementById(`city-${index}-meta`);
+          const aqiEl = document.getElementById(`city-${index}-aqi`);
+
+          if (!nameEl || !metaEl || !aqiEl) {
+            return;
+          }
+
+          nameEl.textContent = city.name;
+          metaEl.textContent = `${city.region} • PM2.5 ${formatValue(current.pm2_5)} µg/m³`;
+          aqiEl.textContent = `AQI ${formatValue(current.us_aqi)}`;
+        });
+
+        const pollutedCities = allCityData.filter((cityData) => Number.isFinite(cityData.current.us_aqi) && cityData.current.us_aqi > 100);
+        const highestPeak = allCityData
+          .map((cityData) => getNext24HourPeak(cityData.hourly))
+          .filter((value) => Number.isFinite(value));
+
+        activeEvents.textContent = formatValue(pollutedCities.length);
+        forecastPeak.textContent = highestPeak.length ? formatValue(Math.max(...highestPeak)) : '--';
+      };
+
+      const loadLiveData = async (selectedCityName = cities[0].name) => {
+        try {
+          snapshotStatus.textContent = 'Загружаем онлайн-данные Open-Meteo по выбранным городам';
+          const allCityData = await Promise.all(cities.map((city) => fetchCityData(city)));
+          renderComparison(allCityData);
+
+          const selectedData = allCityData.find((cityData) => cityData.city.name === selectedCityName) || allCityData[0];
+          renderHero(selectedData);
+        } catch (error) {
+          console.error(error);
+          heroAqiText.textContent = 'Онлайн-данные по качеству воздуха временно недоступны. Попробуйте ещё раз через минуту.';
+          heroPm25Text.textContent = 'Open-Meteo не вернул слой взвешенных мелких частиц для этого запроса.';
+          heroPm10Text.textContent = 'Поток крупных частиц появится снова после следующей успешной синхронизации.';
+          snapshotStatus.textContent = 'Синхронизация с Open-Meteo не удалась. Проверьте сеть и попробуйте снова.';
+        }
+      };
+
+      cityButtons.forEach((button) => {
+        button.addEventListener('click', async () => {
+          const selectedCity = cityMap.get(button.dataset.city);
+          if (!selectedCity) {
+            return;
+          }
+
+          try {
+            const cityData = await fetchCityData(selectedCity);
+            renderHero(cityData);
+          } catch (error) {
+            console.error(error);
+            snapshotStatus.textContent = `Не удалось загрузить город ${selectedCity.name}. Попробуйте ещё раз через несколько секунд.`;
+          }
+        });
+      });
+
+      if (mobileMenuToggle && mobileNav) {
+        const mobileNavLinks = Array.from(mobileNav.querySelectorAll('a'));
+        const setMobileMenuState = (isOpen) => {
+          mobileNav.classList.toggle('hidden', !isOpen);
+          mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        };
+
+        mobileMenuToggle.addEventListener('click', () => {
+          const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+          setMobileMenuState(!isOpen);
+        });
+
+        mobileNavLinks.forEach((link) => {
+          link.addEventListener('click', () => setMobileMenuState(false));
+        });
+      }
+
+      if (accessForm && accessOrganization && accessEmail) {
+        accessForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const organization = accessOrganization.value.trim() || 'Без названия';
+          const email = accessEmail.value.trim() || 'Не указан';
+          const subject = encodeURIComponent(`Запрос демо AERION — ${organization}`);
+          const body = encodeURIComponent(
+            `Организация: ${organization}\nРабочий email: ${email}\n\nХочу получить демо-доступ к AERION и посмотреть онлайн-дашборд качества воздуха.`
+          );
+
+          window.location.href = `mailto:hello@aerionlabs.ai?subject=${subject}&body=${body}`;
+        });
+      }
+
+      loadLiveData();
+    })();
+  </script>
+</body></html>
